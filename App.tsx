@@ -1,11 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { enableScreens } from 'react-native-screens';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { shopcartReducers } from './src/data';
+import ShopcartNavigator from './src/navigation/Shopcartnavigator';
+
+enableScreens();
+
+const store = createStore(shopcartReducers);
 
 export default function App() {
 	return (
-		<View style={styles.container}>
-			<Text>Open up App.tsx to start working on your app!</Text>
-		</View>
+		<Provider store={store}>
+			<ShopcartNavigator />
+		</Provider>
 	);
 }
 
