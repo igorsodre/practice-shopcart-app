@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, Button } from 'react-native';
 import { INavigatorProp, INavigationOptions } from '../../typings';
 import { useSelector } from 'react-redux';
 import { TRootState } from '../../data';
+import { Colors } from '../../constants';
 
 interface ProductDetailRouteParams {
 	productId: string;
@@ -17,9 +18,16 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = (props) => {
 	props.navigation.setOptions(screenOptions({ title: selectedProduct.title }));
 
 	return (
-		<View style={styles.container}>
-			<Text>{selectedProduct.title}</Text>
-		</View>
+		<ScrollView>
+			<View style={styles.imgContainer}>
+				<Image source={{ uri: selectedProduct.imageUrl }} style={{ width: '100%', height: '100%' }} />
+			</View>
+			<View style={styles.buttonContainer}>
+				<Button color={Colors.primary} onPress={() => {}} title="Add to Cart" />
+			</View>
+			<Text style={styles.textPrice}>${selectedProduct.price.toFixed(2)}</Text>
+			<Text style={styles.textDescription}>{selectedProduct.description}</Text>
+		</ScrollView>
 	);
 };
 
@@ -38,6 +46,27 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: '100%',
+	},
+	imgContainer: {
+		height: 300,
+		width: '100%',
+	},
+	buttonContainer: {
+		marginVertical: 10,
+		// width: '50%',
+		alignItems: 'center',
+		// alignSelf: 'center',
+	},
+	textPrice: {
+		fontSize: 20,
+		color: '#888',
+		textAlign: 'center',
+		marginVertical: 20,
+	},
+	textDescription: {
+		marginHorizontal: 20,
+		fontSize: 14,
+		textAlign: 'center',
 	},
 });
 
