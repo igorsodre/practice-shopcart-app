@@ -17,7 +17,7 @@ const CartListItem: React.FC<CartListitemProps> = (props) => {
 			</View>
 
 			<View style={styles.actionContainer}>
-				<Text style={styles.mainText}>{cart.sum}</Text>
+				<Text style={styles.mainText}>{cart.sum.toFixed(2)}</Text>
 				<ShopcartButton
 					iconName="md-trash"
 					color="red"

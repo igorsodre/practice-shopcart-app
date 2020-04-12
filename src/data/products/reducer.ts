@@ -1,5 +1,6 @@
 import { Product } from '../../models/product';
 import PRODUCTS from '../dummy-data';
+import { TReducerFunction } from '..';
 
 export interface IProductsState {
 	availableProducts: Product[];
@@ -10,8 +11,8 @@ const initialState: IProductsState = {
 	availableProducts: PRODUCTS,
 	userProducts: PRODUCTS.filter((p) => p.ownerId === 'u1'),
 };
-
-const productReducer = (state: IProductsState = initialState, action: any) => {
+type ProcetsReducer = TReducerFunction<IProductsState, any>;
+const productReducer: ProcetsReducer = (state = initialState, action) => {
 	return state;
 };
 

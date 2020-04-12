@@ -4,4 +4,8 @@ export class CartItem {
 		this.quantity += 1;
 		this.sum += this.price;
 	}
+	public decrementItem(): void {
+		this.quantity -= 1;
+		this.sum -= this.price;
+	}
 }
