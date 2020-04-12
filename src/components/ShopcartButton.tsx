@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, ViewProps, TextStyle } from 'react-native';
 import {
 	HeaderButton as HButton,
 	HeaderButtonProps as HBProps,
@@ -17,17 +17,8 @@ interface HeaderButtonProps extends HBProps {
 	iconSize?: number;
 }
 const HeaderButton: React.FC<HeaderButtonProps> = (props) => {
-	const color =
-		props.color ||
-		(Platform.OS === 'android' ? 'white' : Colors.primaryColor);
-	return (
-		<HButton
-			{...props}
-			IconComponent={Ionicons}
-			iconSize={props.iconSize || 23}
-			color={color}
-		/>
-	);
+	const color = props.color || (Platform.OS === 'android' ? 'white' : Colors.primaryColor);
+	return <HButton {...props} IconComponent={Ionicons} iconSize={props.iconSize || 23} color={color} />;
 };
 
 interface ShopcartbuttonProps {
@@ -36,6 +27,7 @@ interface ShopcartbuttonProps {
 	iconName: string;
 	color?: string;
 	iconSize?: number;
+	style?: ViewProps | TextStyle;
 }
 const ShopcartButton: React.FC<ShopcartbuttonProps> = (props) => {
 	return (
@@ -46,6 +38,7 @@ const ShopcartButton: React.FC<ShopcartbuttonProps> = (props) => {
 				iconName={props.iconName}
 				onPress={props.onPress}
 				iconSize={props.iconSize}
+				buttonStyle={props.style}
 			/>
 		</HeaderButtons>
 	);

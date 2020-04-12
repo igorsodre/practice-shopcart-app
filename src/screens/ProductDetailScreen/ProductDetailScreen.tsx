@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, Button } from 'react-native';
 import { INavigatorProp, INavigationOptions } from '../../typings';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { TRootState } from '../../data';
 import { Colors } from '../../constants';
+import { addToCart } from '../../data/cart/actions';
 
 interface ProductDetailRouteParams {
 	productId: string;
@@ -11,6 +12,7 @@ interface ProductDetailRouteParams {
 interface ProductDetailScreenProps extends INavigatorProp<any, ProductDetailRouteParams> {}
 
 const ProductDetailScreen: React.FC<ProductDetailScreenProps> = (props) => {
+	const dispatch = useDispatch();
 	const { productId } = props.route.params;
 	const selectedProduct = useSelector((state: TRootState) =>
 		state.products.availableProducts.find((p) => p.id === productId),
@@ -23,7 +25,13 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = (props) => {
 				<Image source={{ uri: selectedProduct.imageUrl }} style={{ width: '100%', height: '100%' }} />
 			</View>
 			<View style={styles.buttonContainer}>
-				<Button color={Colors.primary} onPress={() => {}} title="Add to Cart" />
+				<Button
+					color={Colors.primary}
+					onPress={() => {
+						dispatch(addToCart(selectedProduct));
+					}}
+					title="Add to Cart"
+				/>
 			</View>
 			<Text style={styles.textPrice}>${selectedProduct.price.toFixed(2)}</Text>
 			<Text style={styles.textDescription}>{selectedProduct.description}</Text>

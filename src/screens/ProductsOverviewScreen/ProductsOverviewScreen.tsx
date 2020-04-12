@@ -1,34 +1,46 @@
 import React from 'react';
-import { StyleSheet, Text, View, ListRenderItemInfo } from 'react-native';
-import { INavigatorProp, INavigationOptions, TNavigationController } from '../../typings';
-import { useSelector } from 'react-redux';
-import { TRootState } from '../../data';
+import { StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { Product } from '../../models/product';
+import { useDispatch, useSelector } from 'react-redux';
 import ProductItem from '../../components/ProductItem';
+import ShopcartButton from '../../components/ShopcartButton';
+import { TRootState } from '../../data';
+import { addToCart } from '../../data/cart/actions';
+import { INavigationOptions, INavigatorProp } from '../../typings';
 
 interface ProductsOverviewRouteParams {}
 interface ProductsOverviewScreenProps extends INavigatorProp<any, ProductsOverviewRouteParams> {}
 
-const rednderProduct = (navigation: TNavigationController<any>, itemData: ListRenderItemInfo<Product>) => {
-	return (
-		<ProductItem
-			product={itemData.item}
-			onAddToCart={() => {}}
-			onViewDetail={() => {
-				navigation.navigate('ProductDetail', { productId: itemData.item.id });
-			}}
-		/>
-	);
-};
 const ProductsOverviewScreen: React.FC<ProductsOverviewScreenProps> = (props) => {
-	props.navigation?.setOptions(screenOptions({}));
+	const dispatch = useDispatch();
+	props.navigation?.setOptions(
+		screenOptions({
+			headerRight: () => (
+				<ShopcartButton
+					iconName="md-cart"
+					onPress={() => {
+						props.navigation.navigate('Cart');
+					}}
+				/>
+			),
+		}),
+	);
 	const products = useSelector((state: TRootState) => state.products.availableProducts);
 	return (
 		<View style={styles.container}>
 			<FlatList
 				data={products}
-				renderItem={rednderProduct.bind(null, props.navigation)}
+				renderItem={(itemData) => (
+					<ProductItem
+						product={itemData.item}
+						onAddToCart={() => {
+							dispatch(addToCart(itemData.item));
+						}}
+						onViewDetail={() => {
+							props.navigation.navigate('ProductDetail', { productId: itemData.item.id });
+						}}
+					/>
+				)}
 				style={{ width: '100%' }}
 			/>
 		</View>
