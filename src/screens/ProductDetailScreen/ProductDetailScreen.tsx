@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, Button } from 'react-native';
-import { INavigatorProp, INavigationOptions } from '../../typings';
-import { useSelector, useDispatch } from 'react-redux';
-import { TRootState } from '../../data';
+import { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { Colors } from '../../constants';
+import { TRootState } from '../../data';
 import { addToCart } from '../../data/cart/actions';
+import { INavigationOptions, INavigatorProp } from '../../typings';
 
 interface ProductDetailRouteParams {
 	productId: string;
@@ -17,7 +17,11 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = (props) => {
 	const selectedProduct = useSelector((state: TRootState) =>
 		state.products.availableProducts.find((p) => p.id === productId),
 	)!;
-	props.navigation.setOptions(screenOptions({ title: selectedProduct.title }));
+	props.navigation.setOptions(
+		screenOptions({
+			title: selectedProduct.title,
+		}),
+	);
 
 	return (
 		<ScrollView>

@@ -5,6 +5,9 @@ import { Colors } from '../constants';
 import CartScreen from '../screens/CartScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import ProductsOverviewScreen from '../screens/ProductsOverviewScreen';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import OrdersScreen from '../screens/OrdersScreen';
+import ShopcartButton from '../components/ShopcartButton';
 
 const defaultNavigationOptions: StackNavigationOptions = {
 	headerStyle: {
@@ -13,7 +16,7 @@ const defaultNavigationOptions: StackNavigationOptions = {
 	headerTintColor: 'white',
 };
 const Stack = createStackNavigator();
-const ShopcartStackNavigator = () => (
+const ShopcartBrowseStackNavigator = () => (
 	<Stack.Navigator screenOptions={defaultNavigationOptions}>
 		<Stack.Screen name="ProductOverview" component={ProductsOverviewScreen} />
 		<Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
@@ -21,8 +24,38 @@ const ShopcartStackNavigator = () => (
 	</Stack.Navigator>
 );
 
+const ShopcartOrdersStackNavigator = () => (
+	<Stack.Navigator screenOptions={defaultNavigationOptions}>
+		<Stack.Screen name="Orders" component={OrdersScreen} />
+	</Stack.Navigator>
+);
+
+const Drawer = createDrawerNavigator();
+const ShopcartDrawerNavigator = () => (
+	<Drawer.Navigator drawerType="front">
+		<Drawer.Screen
+			name="Shop"
+			component={ShopcartBrowseStackNavigator}
+			options={{
+				drawerIcon: (props) => (
+					<ShopcartButton iconName="md-list" color={props.focused ? Colors.primary : props.color} />
+				),
+			}}
+		/>
+		<Drawer.Screen
+			name="Orders"
+			component={ShopcartOrdersStackNavigator}
+			options={{
+				drawerIcon: (props) => (
+					<ShopcartButton iconName="md-create" color={props.focused ? Colors.primary : props.color} />
+				),
+			}}
+		/>
+	</Drawer.Navigator>
+);
+
 export default () => (
 	<NavigationContainer>
-		<ShopcartStackNavigator />
+		<ShopcartDrawerNavigator />
 	</NavigationContainer>
 );

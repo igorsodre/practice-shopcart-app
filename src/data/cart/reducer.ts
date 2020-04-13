@@ -1,6 +1,7 @@
 import { CartActionType, ADD_TO_CART, REMOVE_FROM_CART, IAddToCartAction, IRemoveFromCartAction } from './actions';
 import { CartItem } from '../../models/cart-item';
 import { TReducerFunction } from '..';
+import { ADD_ORDER_ACTION } from '../orders/actions';
 
 export type ICartItemHolder = {
 	[key in string]?: CartItem;
@@ -14,7 +15,7 @@ const initialState: ICartState = {
 	items: {},
 	totalAmount: 0,
 };
-type CartReducer = TReducerFunction<ICartState, CartActionType>;
+export type CartReducer = TReducerFunction<ICartState, CartActionType>;
 
 const addToCart: CartReducer = (state, action) => {
 	const newState = { ...state };
@@ -46,13 +47,23 @@ const removeFromCart: CartReducer = (state, action) => {
 	return newState;
 };
 
-const cartReducer: CartReducer = (state = initialState, action) => {
+const clearOrder: CartReducer = (state, _2) => {
+	const newState = { ...state };
+	delete newState.items;
+	newState.items = {};
+	newState.totalAmount = 0;
+	return newState;
+};
+
+const cartReducer = (state: ICartState = initialState, action: CartActionType): ICartState => {
 	try {
 		switch (action.type) {
 			case ADD_TO_CART:
 				return addToCart(state, action);
 			case REMOVE_FROM_CART:
 				return removeFromCart(state, action);
+			case ADD_ORDER_ACTION:
+				return clearOrder(state, action);
 			default:
 				return state;
 		}

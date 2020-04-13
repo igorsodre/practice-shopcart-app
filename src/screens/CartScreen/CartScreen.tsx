@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Colors } from '../../constants';
 import { TRootState } from '../../data';
-import { INavigationOptions, INavigatorProp } from '../../typings';
-import CartListItem from './CartListItem';
 import { removeFromCart } from '../../data/cart/actions';
 import { addOrder } from '../../data/orders/actions';
+import { INavigationOptions, INavigatorProp } from '../../typings';
+import CartListItem from './CartListItem';
 
 interface CartScreenRouteParams {}
 interface CartScreenProps extends INavigatorProp<any, CartScreenRouteParams> {}

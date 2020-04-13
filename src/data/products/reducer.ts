@@ -11,8 +11,8 @@ const initialState: IProductsState = {
 	availableProducts: PRODUCTS,
 	userProducts: PRODUCTS.filter((p) => p.ownerId === 'u1'),
 };
-type ProcetsReducer = TReducerFunction<IProductsState, any>;
-const productReducer: ProcetsReducer = (state = initialState, action) => {
+// export type ProductsReducer = TReducerFunction<IProductsState, any>;
+const productReducer = (state: IProductsState = initialState, action: any): IProductsState => {
 	return state;
 };
 

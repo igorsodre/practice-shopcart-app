@@ -23,6 +23,7 @@ const ProductsOverviewScreen: React.FC<ProductsOverviewScreenProps> = (props) =>
 					}}
 				/>
 			),
+			headerLeft: () => <ShopcartButton iconName="md-menu" onPress={() => props.navigation.toggleDrawer()} />,
 		}),
 	);
 	const products = useSelector((state: TRootState) => state.products.availableProducts);
