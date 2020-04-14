@@ -1,11 +1,13 @@
-import { CartActionType, ADD_TO_CART, REMOVE_FROM_CART, IAddToCartAction, IRemoveFromCartAction } from './actions';
-import { CartItem } from '../../models/cart-item';
+import R from 'ramda';
 import { TReducerFunction } from '..';
+import { CartItem, decrementCartItem, icrementCartItem } from '../../models/cart-item';
 import { ADD_ORDER_ACTION } from '../orders/actions';
+import { ADD_TO_CART, CartActionType, IAddToCartAction, IRemoveFromCartAction, REMOVE_FROM_CART } from './actions';
 
 export type ICartItemHolder = {
 	[key in string]?: CartItem;
 };
+
 export interface ICartState {
 	items: ICartItemHolder;
 	totalAmount: number;
@@ -15,15 +17,16 @@ const initialState: ICartState = {
 	items: {},
 	totalAmount: 0,
 };
+
 export type CartReducer = TReducerFunction<ICartState, CartActionType>;
 
 const addToCart: CartReducer = (state, action) => {
-	const newState = { ...state };
+	const newState = R.clone(state);
 	const addedProduct = (action as IAddToCartAction).product;
 	const { price: addedPrice, title } = addedProduct;
 
 	if (newState.items[addedProduct.id]) {
-		newState.items[addedProduct.id]?.icrementItem();
+		newState.items[addedProduct.id] = icrementCartItem(newState.items[addedProduct.id]!);
 	} else {
 		const cartItem = new CartItem(1, addedPrice, title, addedPrice);
 		newState.items[addedProduct.id] = cartItem;
@@ -33,12 +36,12 @@ const addToCart: CartReducer = (state, action) => {
 };
 
 const removeFromCart: CartReducer = (state, action) => {
-	const newState = { ...state };
+	const newState = R.clone(state);
 	const id = (action as IRemoveFromCartAction).productId;
 	if (newState.items[id]) {
 		const removedPrice = newState.items[id]!.price;
 		if (newState.items[id]!.quantity > 1) {
-			newState.items[id]?.decrementItem();
+			newState.items[id] = decrementCartItem(newState.items[id]!);
 		} else {
 			delete newState.items[id];
 		}
@@ -47,12 +50,8 @@ const removeFromCart: CartReducer = (state, action) => {
 	return newState;
 };
 
-const clearOrder: CartReducer = (state, _2) => {
-	const newState = { ...state };
-	delete newState.items;
-	newState.items = {};
-	newState.totalAmount = 0;
-	return newState;
+const clearOrder = (): ICartState => {
+	return R.clone(initialState);
 };
 
 const cartReducer = (state: ICartState = initialState, action: CartActionType): ICartState => {
@@ -63,7 +62,7 @@ const cartReducer = (state: ICartState = initialState, action: CartActionType): 
 			case REMOVE_FROM_CART:
 				return removeFromCart(state, action);
 			case ADD_ORDER_ACTION:
-				return clearOrder(state, action);
+				return clearOrder();
 			default:
 				return state;
 		}

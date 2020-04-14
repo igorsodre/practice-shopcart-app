@@ -1,23 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Platform, StyleSheet, ViewProps, TextStyle } from 'react-native';
+import { Platform, TextStyle, ViewProps } from 'react-native';
 import {
 	HeaderButton as HButton,
 	HeaderButtonProps as HBProps,
 	HeaderButtons,
 	Item,
 } from 'react-navigation-header-buttons';
-// import Colors from '../constants/Colors';
-const Colors = {
-	primaryColor: 'red',
-};
+import { Colors } from '../constants';
 
 interface HeaderButtonProps extends HBProps {
 	color?: string;
 	iconSize?: number;
 }
 const HeaderButton: React.FC<HeaderButtonProps> = (props) => {
-	const color = props.color || (Platform.OS === 'android' ? 'white' : Colors.primaryColor);
+	const color = props.color || (Platform.OS === 'android' ? 'white' : Colors.primary);
 	return <HButton {...props} IconComponent={Ionicons} iconSize={props.iconSize || 23} color={color} />;
 };
 

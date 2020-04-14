@@ -1,13 +1,13 @@
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import React from 'react';
+import ShopcartButton from '../components/ShopcartButton';
 import { Colors } from '../constants';
 import CartScreen from '../screens/CartScreen';
+import OrdersScreen from '../screens/OrdersScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import ProductsOverviewScreen from '../screens/ProductsOverviewScreen';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import OrdersScreen from '../screens/OrdersScreen';
-import ShopcartButton from '../components/ShopcartButton';
 
 const defaultNavigationOptions: StackNavigationOptions = {
 	headerStyle: {

@@ -1,6 +1,5 @@
 import { Product } from '../../models/product';
 import PRODUCTS from '../dummy-data';
-import { TReducerFunction } from '..';
 
 export interface IProductsState {
 	availableProducts: Product[];

@@ -9,8 +9,8 @@ import { addOrder } from '../../data/orders/actions';
 import { INavigationOptions, INavigatorProp } from '../../typings';
 import CartListItem from './CartListItem';
 
-interface CartScreenRouteParams {}
-interface CartScreenProps extends INavigatorProp<any, CartScreenRouteParams> {}
+type CartScreenRouteParams = {};
+type CartScreenProps = INavigatorProp<{}, CartScreenRouteParams>;
 
 const CartScreen: React.FC<CartScreenProps> = (props) => {
 	const dispatch = useDispatch();
@@ -60,7 +60,6 @@ const screenOptions = (optional: Partial<INavigationOptions> = {}): INavigationO
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		//justifyContent: 'center',
 		alignItems: 'center',
 		padding: 20,
 		width: '100%',

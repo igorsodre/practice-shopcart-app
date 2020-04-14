@@ -11,6 +11,6 @@ export const shopcartReducers = combineReducers({
 });
 
 export type TRootState = ReturnType<typeof shopcartReducers>;
-export type TReducerFunction<T = {}, U = {}> = (state: T, action: U) => T;
+export type TReducerFunction<T = {}, U = {}> = (state: T, action?: U) => T;
 
 export const PRODUCTS = dummyData;

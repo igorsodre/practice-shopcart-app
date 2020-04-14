@@ -1,6 +1,7 @@
-import { OrderActionType, ADD_ORDER_ACTION, IAddOrderAction } from './actions';
-import { Order } from '../../models/order';
+import R from 'ramda';
 import { TReducerFunction } from '..';
+import { Order } from '../../models/order';
+import { ADD_ORDER_ACTION, IAddOrderAction, OrderActionType } from './actions';
 
 export interface IOrderState {
 	orders: Order[];
@@ -12,7 +13,7 @@ const initialState: IOrderState = {
 export type OrderReducer = TReducerFunction<IOrderState, OrderActionType>;
 
 const addOrder: OrderReducer = (state, action) => {
-	const newState = { ...state };
+	const newState = R.clone(state);
 	const { amout: amount, items } = (action as IAddOrderAction).payload;
 	const newOrder = new Order(new Date().toString(), items, amount, new Date());
 	newState.orders.push(newOrder);

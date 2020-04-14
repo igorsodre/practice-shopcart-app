@@ -1,37 +1,36 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { INavigatorProp, INavigationOptions } from '../../typings';
+import { INavigationOptions, INavigatorProp } from '../../typings';
 
-interface UserProductsRouteParams {
-}
-interface UserProductsScreenProps extends INavigatorProp<any, UserProductsRouteParams> { }
+type UserProductsRouteParams = {};
+type UserProductsScreenProps = INavigatorProp<{}, UserProductsRouteParams>;
 
-const UserProductsScreen: React.FC<UserProductsScreenProps> = props => {
+const UserProductsScreen: React.FC<UserProductsScreenProps> = (props) => {
+	props.navigation.setOptions(screenOptions({}));
 
-    props.navigation.setOptions(screenOptions({}));
-
-    return (
-        <View style={styles.container}>
-            <Text>UserProducts</Text>
-        </View>
-    );
+	return (
+		<View style={styles.container}>
+			<Text>UserProducts</Text>
+		</View>
+	);
 };
 
 const screenOptions = (optional: Partial<INavigationOptions> = {}): INavigationOptions => {
-    return {
-        ...{
-            title: 'UserProducts',
-        }, ...optional
-    };
+	return {
+		...{
+			title: 'UserProducts',
+		},
+		...optional,
+	};
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%'
-    }
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: '100%',
+	},
 });
 
 export default UserProductsScreen;

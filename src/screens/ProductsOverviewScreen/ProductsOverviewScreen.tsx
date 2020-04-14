@@ -8,8 +8,8 @@ import { TRootState } from '../../data';
 import { addToCart } from '../../data/cart/actions';
 import { INavigationOptions, INavigatorProp } from '../../typings';
 
-interface ProductsOverviewRouteParams {}
-interface ProductsOverviewScreenProps extends INavigatorProp<any, ProductsOverviewRouteParams> {}
+type ProductsOverviewRouteParams = {};
+type ProductsOverviewScreenProps = INavigatorProp<{}, ProductsOverviewRouteParams>;
 
 const ProductsOverviewScreen: React.FC<ProductsOverviewScreenProps> = (props) => {
 	const dispatch = useDispatch();

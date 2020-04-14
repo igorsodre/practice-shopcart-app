@@ -9,7 +9,7 @@ import { INavigationOptions, INavigatorProp } from '../../typings';
 interface ProductDetailRouteParams {
 	productId: string;
 }
-interface ProductDetailScreenProps extends INavigatorProp<any, ProductDetailRouteParams> {}
+type ProductDetailScreenProps = INavigatorProp<{}, ProductDetailRouteParams>;
 
 const ProductDetailScreen: React.FC<ProductDetailScreenProps> = (props) => {
 	const dispatch = useDispatch();

@@ -6,8 +6,8 @@ import ShopcartButton from '../../components/ShopcartButton';
 import { TRootState } from '../../data';
 import { INavigationOptions, INavigatorProp } from '../../typings';
 
-interface OrdersRouteParams {}
-interface OrdersScreenProps extends INavigatorProp<any, OrdersRouteParams> {}
+type OrdersRouteParams = {};
+type OrdersScreenProps = INavigatorProp<{}, OrdersRouteParams>;
 
 const OrdersScreen: React.FC<OrdersScreenProps> = (props) => {
 	const orders = useSelector((state: TRootState) => state.orders.orders);
