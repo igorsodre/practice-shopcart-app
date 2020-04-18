@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import ShopcartButton from '../../components/ShopcartButton';
 import { TRootState } from '../../data';
 import { INavigationOptions, INavigatorProp } from '../../typings';
+import OrderItem from './OrderItem';
 
 type OrdersRouteParams = {};
 type OrdersScreenProps = INavigatorProp<{}, OrdersRouteParams>;
@@ -18,7 +19,11 @@ const OrdersScreen: React.FC<OrdersScreenProps> = (props) => {
 	);
 	return (
 		<View style={styles.container}>
-			<FlatList data={orders} renderItem={(itemData) => <Text>{itemData.item.totalAmount.toFixed(2)}</Text>} />
+			<FlatList
+				style={{ width: '100%' }}
+				data={orders}
+				renderItem={(itemData) => <OrderItem order={itemData.item} />}
+			/>
 		</View>
 	);
 };

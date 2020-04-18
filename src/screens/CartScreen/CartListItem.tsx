@@ -6,6 +6,7 @@ import { CartItem } from '../../models/cart-item';
 interface CartListitemProps {
 	onRemove: () => void;
 	cartItem: CartItem;
+	hideButton?: boolean;
 }
 const CartListItem: React.FC<CartListitemProps> = (props) => {
 	const cart = props.cartItem;
@@ -18,14 +19,16 @@ const CartListItem: React.FC<CartListitemProps> = (props) => {
 
 			<View style={styles.actionContainer}>
 				<Text style={styles.mainText}>{cart.sum.toFixed(2)}</Text>
-				<ShopcartButton
-					iconName="md-trash"
-					color="red"
-					onPress={() => {
-						props.onRemove();
-					}}
-					style={{ marginLeft: 20 }}
-				/>
+				{!props.hideButton && (
+					<ShopcartButton
+						iconName="md-trash"
+						color="red"
+						onPress={() => {
+							props.onRemove();
+						}}
+						style={{ marginLeft: 20 }}
+					/>
+				)}
 			</View>
 		</View>
 	);

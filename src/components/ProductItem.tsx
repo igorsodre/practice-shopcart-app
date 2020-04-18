@@ -5,13 +5,13 @@ import { Product } from '../models/product';
 
 interface ProductItemProps {
 	product: Product;
-	onViewDetail?: () => void;
+	onSelect?: () => void;
 	onAddToCart?: () => void;
 }
 const ProductItem: React.FC<ProductItemProps> = (props) => {
 	const { product } = props;
 	return (
-		<TouchableOpacity activeOpacity={0.9} onPress={() => props.onViewDetail?.call(null)}>
+		<TouchableOpacity activeOpacity={0.9} onPress={() => props.onSelect?.call(null)}>
 			<View style={styles.container}>
 				<View style={styles.imgContainer}>
 					<Image source={{ uri: product.imageUrl }} style={{ height: '100%', width: '100%' }} />
@@ -21,12 +21,17 @@ const ProductItem: React.FC<ProductItemProps> = (props) => {
 					<Text style={styles.priceTextStyle}>${product.price.toFixed(2)}</Text>
 				</View>
 				<View style={styles.buttonsContainer}>
-					<Button
-						color={Colors.primary}
-						onPress={() => props.onViewDetail?.call(null)}
-						title="View Details"
-					/>
-					<Button color={Colors.primary} onPress={() => props.onAddToCart?.call(null)} title="To Cart" />
+					{!props.children && (
+						<Button
+							color={Colors.primary}
+							onPress={() => props.onSelect?.call(null)}
+							title="View Details"
+						/>
+					)}
+					{!props.children && (
+						<Button color={Colors.primary} onPress={() => props.onAddToCart?.call(null)} title="To Cart" />
+					)}
+					{props.children}
 				</View>
 			</View>
 		</TouchableOpacity>

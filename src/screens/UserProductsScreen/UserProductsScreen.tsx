@@ -1,24 +1,65 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { useDispatch, useSelector } from 'react-redux';
+import ProductItem from '../../components/ProductItem';
+import ShopcartButton from '../../components/ShopcartButton';
+import { Colors } from '../../constants';
+import { TRootState } from '../../data';
+import { deleteProduct } from '../../data/products/actions';
+import { Product } from '../../models/product';
 import { INavigationOptions, INavigatorProp } from '../../typings';
 
 type UserProductsRouteParams = {};
 type UserProductsScreenProps = INavigatorProp<{}, UserProductsRouteParams>;
 
 const UserProductsScreen: React.FC<UserProductsScreenProps> = (props) => {
-	props.navigation.setOptions(screenOptions({}));
-
+	props.navigation.setOptions(
+		screenOptions({
+			headerLeft: () => <ShopcartButton iconName="md-menu" onPress={() => props.navigation.toggleDrawer()} />,
+			headerRight: () => (
+				<ShopcartButton iconName="md-create" onPress={() => props.navigation.navigate('EditProduct', {})} />
+			),
+		}),
+	);
+	const userProducts = useSelector((state: TRootState) => state.products.userProducts);
+	const dispatch = useDispatch();
+	const selectProductHandler = (product: Product) => {
+		props.navigation.navigate('EditProduct', { product });
+	};
 	return (
-		<View style={styles.container}>
-			<Text>UserProducts</Text>
-		</View>
+		<FlatList
+			style={styles.container}
+			data={userProducts}
+			renderItem={(itemData) => {
+				return (
+					<ProductItem
+						product={itemData.item}
+						onAddToCart={() => null}
+						onSelect={() => selectProductHandler(itemData.item)}>
+						<Button
+							color={Colors.primary}
+							onPress={() => selectProductHandler(itemData.item)}
+							title="Edit"
+						/>
+						<Button
+							color={Colors.primary}
+							onPress={() => {
+								dispatch(deleteProduct(itemData.item.id));
+							}}
+							title="Delete"
+						/>
+					</ProductItem>
+				);
+			}}
+		/>
 	);
 };
 
 const screenOptions = (optional: Partial<INavigationOptions> = {}): INavigationOptions => {
 	return {
 		...{
-			title: 'UserProducts',
+			title: 'Your Products',
 		},
 		...optional,
 	};
@@ -26,9 +67,6 @@ const screenOptions = (optional: Partial<INavigationOptions> = {}): INavigationO
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
 		width: '100%',
 	},
 });

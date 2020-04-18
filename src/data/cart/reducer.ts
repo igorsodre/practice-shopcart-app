@@ -3,6 +3,7 @@ import { TReducerFunction } from '..';
 import { CartItem, decrementCartItem, icrementCartItem } from '../../models/cart-item';
 import { ADD_ORDER_ACTION } from '../orders/actions';
 import { ADD_TO_CART, CartActionType, IAddToCartAction, IRemoveFromCartAction, REMOVE_FROM_CART } from './actions';
+import { IDeleteProductAction, DELETE_PRODUCT } from '../products/actions';
 
 export type ICartItemHolder = {
 	[key in string]?: CartItem;
@@ -50,6 +51,16 @@ const removeFromCart: CartReducer = (state, action) => {
 	return newState;
 };
 
+const deleteProduct: CartReducer = (state, action) => {
+	const newState = R.clone(state);
+	const pid = (action as IDeleteProductAction).productId;
+	if (newState.items[pid]) {
+		newState.totalAmount -= newState.items[pid]!.sum;
+		delete newState.items[pid];
+	}
+	return newState;
+};
+
 const clearOrder = (): ICartState => {
 	return R.clone(initialState);
 };
@@ -63,6 +74,8 @@ const cartReducer = (state: ICartState = initialState, action: CartActionType): 
 				return removeFromCart(state, action);
 			case ADD_ORDER_ACTION:
 				return clearOrder();
+			case DELETE_PRODUCT:
+				return deleteProduct(state, action);
 			default:
 				return state;
 		}

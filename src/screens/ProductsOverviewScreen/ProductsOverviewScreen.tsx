@@ -37,7 +37,7 @@ const ProductsOverviewScreen: React.FC<ProductsOverviewScreenProps> = (props) =>
 						onAddToCart={() => {
 							dispatch(addToCart(itemData.item));
 						}}
-						onViewDetail={() => {
+						onSelect={() => {
 							props.navigation.navigate('ProductDetail', { productId: itemData.item.id });
 						}}
 					/>

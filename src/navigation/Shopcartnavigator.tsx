@@ -8,6 +8,8 @@ import CartScreen from '../screens/CartScreen';
 import OrdersScreen from '../screens/OrdersScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import ProductsOverviewScreen from '../screens/ProductsOverviewScreen';
+import UserProductsScreen from '../screens/UserProductsScreen';
+import EditProductScreen from '../screens/EditProductScreen';
 
 const defaultNavigationOptions: StackNavigationOptions = {
 	headerStyle: {
@@ -30,6 +32,13 @@ const ShopcartOrdersStackNavigator = () => (
 	</Stack.Navigator>
 );
 
+const ShopcartUserStackNavigator = () => (
+	<Stack.Navigator screenOptions={defaultNavigationOptions}>
+		<Stack.Screen name="UserProducts" component={UserProductsScreen} />
+		<Stack.Screen name="EditProduct" component={EditProductScreen} />
+	</Stack.Navigator>
+);
+
 const Drawer = createDrawerNavigator();
 const ShopcartDrawerNavigator = () => (
 	<Drawer.Navigator drawerType="front">
@@ -38,13 +47,23 @@ const ShopcartDrawerNavigator = () => (
 			component={ShopcartBrowseStackNavigator}
 			options={{
 				drawerIcon: (props) => (
-					<ShopcartButton iconName="md-list" color={props.focused ? Colors.primary : props.color} />
+					<ShopcartButton iconName="md-cart" color={props.focused ? Colors.primary : props.color} />
 				),
 			}}
 		/>
 		<Drawer.Screen
 			name="Orders"
 			component={ShopcartOrdersStackNavigator}
+			options={{
+				drawerIcon: (props) => (
+					<ShopcartButton iconName="md-list" color={props.focused ? Colors.primary : props.color} />
+				),
+			}}
+		/>
+
+		<Drawer.Screen
+			name="User Products"
+			component={ShopcartUserStackNavigator}
 			options={{
 				drawerIcon: (props) => (
 					<ShopcartButton iconName="md-create" color={props.focused ? Colors.primary : props.color} />
