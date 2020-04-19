@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, KeyboardAvoidingView, Alert } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import ShopcartButton from '../../components/ShopcartButton';
 import { Product } from '../../models/product';
 import { INavigationOptions, INavigatorProp } from '../../typings';
 import { useDispatch } from 'react-redux';
 import { updateProduct, createProduct } from '../../data/products/actions';
+import { isURL } from '../../constants';
 
 type EditProductScreenState = {
 	title: string;
@@ -35,7 +36,19 @@ const EditProductScreen: React.FC<EditProductScreenProps> = (props) => {
 		setState((old) => ({ ...old, ...newState }));
 	};
 
+	const validateForm = (): boolean => {
+		let result = true;
+		result = result && state.title.length > 0;
+		result = result && Number(state.price) > 0;
+		result = result && isURL(state.imageUrl);
+		return result;
+	};
+
 	const submitHandler = () => {
+		if (!validateForm()) {
+			Alert.alert('Error', 'Invalid Form Data');
+			return;
+		}
 		const { title, description, imageUrl, price } = state;
 		if (product) {
 			dispatch(updateProduct(product.id, title, description, imageUrl));
@@ -52,19 +65,28 @@ const EditProductScreen: React.FC<EditProductScreenProps> = (props) => {
 		}),
 	);
 
+	const priceInputHandler = (text: string) => {
+		updateState({ price: text.match(/\d|\./g)?.join('') || '' });
+	};
+
 	return (
-		<ScrollView
-			contentContainerStyle={styles.scrollable}
-			keyboardShouldPersistTaps="handled"
-			removeClippedSubviews={false}>
-			<KeyboardAvoidingView style={styles.scrollable}>
+		<KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={150}>
+			<ScrollView
+				contentContainerStyle={styles.scrollable}
+				keyboardShouldPersistTaps="handled"
+				removeClippedSubviews={false}>
 				<View style={styles.form}>
 					<View style={styles.formControll}>
 						<Text style={styles.labelStyle}>Title</Text>
 						<TextInput
 							style={styles.inputStyle}
 							value={state.title}
-							onChangeText={(text) => updateState({ title: text })}
+							onChangeText={(text) => {
+								updateState({ title: text });
+							}}
+							autoCapitalize="sentences"
+							autoCorrect
+							returnKeyType="next"
 						/>
 					</View>
 					<View style={styles.formControll}>
@@ -81,7 +103,8 @@ const EditProductScreen: React.FC<EditProductScreenProps> = (props) => {
 							<TextInput
 								style={styles.inputStyle}
 								value={state.price}
-								onChangeText={(text) => updateState({ price: text })}
+								onChangeText={priceInputHandler}
+								keyboardType="decimal-pad"
 							/>
 						</View>
 					)}
@@ -91,11 +114,15 @@ const EditProductScreen: React.FC<EditProductScreenProps> = (props) => {
 							style={styles.inputStyle}
 							value={state.description}
 							onChangeText={(text) => updateState({ description: text })}
+							autoCapitalize="sentences"
+							multiline
+							autoCorrect
+							numberOfLines={3}
 						/>
 					</View>
 				</View>
-			</KeyboardAvoidingView>
-		</ScrollView>
+			</ScrollView>
+		</KeyboardAvoidingView>
 	);
 };
 
@@ -111,7 +138,6 @@ const screenOptions = (optional: Partial<INavigationOptions> = {}): INavigationO
 const styles = StyleSheet.create({
 	scrollable: {
 		width: '100%',
-		height: '100%',
 	},
 	form: {
 		flex: 1,
