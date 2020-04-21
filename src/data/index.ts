@@ -9,7 +9,6 @@ export const shopcartReducers = combineReducers({
 	cart: cartReducer,
 	orders: ordersReducer,
 });
-
 export type TRootState = ReturnType<typeof shopcartReducers>;
 export type TReducerFunction<T = {}, U = {}> = (state: T, action?: U) => T;
 

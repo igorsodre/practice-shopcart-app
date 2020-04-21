@@ -1,16 +1,17 @@
+import R from 'ramda';
+import { TReducerFunction } from '..';
 import { Product } from '../../models/product';
-import PRODUCTS from '../dummy-data';
 import {
-	IProductActionType,
-	DELETE_PRODUCT,
-	IDeleteProductAction,
 	CREATE_PRODUCT,
+	DELETE_PRODUCT,
+	FETCH_PRODUCTS,
 	ICreateProductAction,
+	IDeleteProductAction,
+	IFetchProductsAction,
+	IProductActionType,
 	IUpdateProductAction,
 	UPDATE_PRODUCT,
 } from './actions';
-import { TReducerFunction } from '..';
-import R from 'ramda';
 
 export interface IProductsState {
 	availableProducts: Product[];
@@ -18,11 +19,19 @@ export interface IProductsState {
 }
 
 const initialState: IProductsState = {
-	availableProducts: PRODUCTS,
-	userProducts: PRODUCTS.filter((p) => p.ownerId === 'u1'),
+	availableProducts: [],
+	userProducts: [],
 };
 
 export type ProductsReducer = TReducerFunction<IProductsState, IProductActionType>;
+const fetchProducts: ProductsReducer = (_, action) => {
+	const { products } = action as IFetchProductsAction;
+	return {
+		availableProducts: products,
+		userProducts: products,
+	};
+};
+
 const deleteProduct: ProductsReducer = (state, action) => {
 	const newState = R.clone(state);
 	const pid = (action as IDeleteProductAction).productId;
@@ -59,6 +68,8 @@ const updateProduct: ProductsReducer = (state, action) => {
 
 const productReducer = (state: IProductsState = initialState, action: IProductActionType): IProductsState => {
 	switch (action.type) {
+		case FETCH_PRODUCTS:
+			return fetchProducts(state, action);
 		case CREATE_PRODUCT:
 			return createProduct(state, action);
 		case UPDATE_PRODUCT:

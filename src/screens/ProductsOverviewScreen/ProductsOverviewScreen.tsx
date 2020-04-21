@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,12 +7,18 @@ import ShopcartButton from '../../components/ShopcartButton';
 import { TRootState } from '../../data';
 import { addToCart } from '../../data/cart/actions';
 import { INavigationOptions, INavigatorProp } from '../../typings';
+import { fetchProducts } from '../../data/products/actions';
 
 type ProductsOverviewRouteParams = {};
 type ProductsOverviewScreenProps = INavigatorProp<{}, ProductsOverviewRouteParams>;
 
 const ProductsOverviewScreen: React.FC<ProductsOverviewScreenProps> = (props) => {
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(fetchProducts());
+	}, []);
+
 	props.navigation?.setOptions(
 		screenOptions({
 			headerRight: () => (

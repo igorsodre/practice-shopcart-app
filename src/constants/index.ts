@@ -1,3 +1,5 @@
+import { PostRequestBody } from '../typings';
+
 export const Colors = {
 	primary: '#C2185B',
 	accent: '#FFC107',
@@ -16,7 +18,17 @@ export const isURL = (str: string): boolean => {
 	return pattern.test(str);
 };
 
+export const postBody = <T>(arg0: T): PostRequestBody => ({
+	method: 'POST',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify(arg0),
+});
+
+export const BASE_URL = 'https://rpgmanager-ea5c9.firebaseio.com';
+
 export default {
 	Colors,
 	isURL,
+	postBody,
+	BASE_URL,
 };

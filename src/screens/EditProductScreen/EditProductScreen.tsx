@@ -40,7 +40,7 @@ const EditProductScreen: React.FC<EditProductScreenProps> = (props) => {
 		let result = true;
 		result = result && state.title.length > 0;
 		result = result && Number(state.price) > 0;
-		result = result && isURL(state.imageUrl);
+		// result = result && isURL(state.imageUrl);
 		return result;
 	};
 
@@ -53,7 +53,14 @@ const EditProductScreen: React.FC<EditProductScreenProps> = (props) => {
 		if (product) {
 			dispatch(updateProduct(product.id, title, description, imageUrl));
 		} else {
-			dispatch(createProduct(title, description, imageUrl, price));
+			dispatch(
+				createProduct(
+					title,
+					description,
+					'https://images.pexels.com/photos/912110/pexels-photo-912110.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+					price,
+				),
+			);
 		}
 		props.navigation.pop();
 	};

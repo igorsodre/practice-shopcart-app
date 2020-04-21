@@ -9,6 +9,12 @@ export interface INavigatorProp<T = {}, U = {}> {
 }
 
 export type INavigationOptions = StackNavigationOptions;
+export type PostRequestBody = {
+	method: string;
+	headers: { 'Content-Type': string };
+	body: string;
+};
+export type ThunxDispatcher<T> = (arg0: (arg1: T) => void) => Promise<void>;
 
 export default {
 	INavigatorProp,
