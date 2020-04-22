@@ -27,8 +27,8 @@ export type ProductsReducer = TReducerFunction<IProductsState, IProductActionTyp
 const fetchProducts: ProductsReducer = (_, action) => {
 	const { products } = action as IFetchProductsAction;
 	return {
-		availableProducts: products,
-		userProducts: products,
+		availableProducts: [...products],
+		userProducts: [...products],
 	};
 };
 
@@ -41,6 +41,7 @@ const deleteProduct: ProductsReducer = (state, action) => {
 };
 
 const createProduct: ProductsReducer = (state, action) => {
+	console.log('Called create product');
 	const newState = R.clone(state);
 	const product = (action as ICreateProductAction).product;
 	newState.userProducts.push(product);

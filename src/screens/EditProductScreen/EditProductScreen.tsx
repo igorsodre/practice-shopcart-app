@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, KeyboardAvoidingView, Alert } from 'react-native';
+import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
 import ShopcartButton from '../../components/ShopcartButton';
+import { createProduct, updateProduct } from '../../data/products/actions';
 import { Product } from '../../models/product';
 import { INavigationOptions, INavigatorProp } from '../../typings';
-import { useDispatch } from 'react-redux';
-import { updateProduct, createProduct } from '../../data/products/actions';
-import { isURL } from '../../constants';
 
 type EditProductScreenState = {
 	title: string;
@@ -50,19 +49,25 @@ const EditProductScreen: React.FC<EditProductScreenProps> = (props) => {
 			return;
 		}
 		const { title, description, imageUrl, price } = state;
-		if (product) {
-			dispatch(updateProduct(product.id, title, description, imageUrl));
+		if (product && product.id) {
+			updateProduct(
+				product.id,
+				title,
+				description,
+				imageUrl,
+			)(dispatch).then(() => {
+				props.navigation.pop();
+			});
 		} else {
-			dispatch(
-				createProduct(
-					title,
-					description,
-					'https://images.pexels.com/photos/912110/pexels-photo-912110.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-					price,
-				),
-			);
+			createProduct(
+				title,
+				description,
+				'https://images.pexels.com/photos/912110/pexels-photo-912110.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+				price,
+			)(dispatch).then(() => {
+				props.navigation.pop();
+			});
 		}
-		props.navigation.pop();
 	};
 
 	props.navigation.setOptions(

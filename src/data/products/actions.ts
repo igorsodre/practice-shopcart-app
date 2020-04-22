@@ -94,18 +94,48 @@ export const createProduct = (
 	};
 };
 
-export const updateProduct = (id: string, title: string, description: string, imageUrl: string): IProductActionType => {
+export const updateProduct = (
+	id: string,
+	title: string,
+	description: string,
+	imageUrl: string,
+): ThunxDispatcher<IUpdateProductAction> => {
 	const prod = new Product(id, 'n1', title, imageUrl, description, 0);
+	return async (dispatch): Promise<void> => {
+		try {
+			await firebase
+				.database()
+				.ref('/products/' + id)
+				.update({
+					title,
+					description,
+					imageUrl,
+				});
 
-	return {
-		type: UPDATE_PRODUCT,
-		product: prod,
+			dispatch({
+				type: UPDATE_PRODUCT,
+				product: prod,
+			});
+		} catch (err) {
+			console.log(err);
+		}
 	};
 };
 
-export const deleteProduct = (productId: string): IProductActionType => {
-	return {
-		type: DELETE_PRODUCT,
-		productId,
+export const deleteProduct = (productId: string): ThunxDispatcher<IDeleteProductAction> => {
+	return async (dispatch): Promise<void> => {
+		try {
+			await firebase
+				.database()
+				.ref('/products/' + productId)
+				.remove();
+
+			dispatch({
+				type: DELETE_PRODUCT,
+				productId,
+			});
+		} catch (err) {
+			console.log(err);
+		}
 	};
 };

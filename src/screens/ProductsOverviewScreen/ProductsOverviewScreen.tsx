@@ -1,22 +1,36 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductItem from '../../components/ProductItem';
 import ShopcartButton from '../../components/ShopcartButton';
+import { Colors } from '../../constants';
 import { TRootState } from '../../data';
 import { addToCart } from '../../data/cart/actions';
-import { INavigationOptions, INavigatorProp } from '../../typings';
 import { fetchProducts } from '../../data/products/actions';
+import { INavigationOptions, INavigatorProp } from '../../typings';
 
 type ProductsOverviewRouteParams = {};
 type ProductsOverviewScreenProps = INavigatorProp<{}, ProductsOverviewRouteParams>;
 
 const ProductsOverviewScreen: React.FC<ProductsOverviewScreenProps> = (props) => {
 	const dispatch = useDispatch();
+	const [isLoading, setIsLoading] = useState(false);
+
+	const loadProducts = () => {
+		console.log('loading products');
+		setIsLoading(true);
+		fetchProducts()(dispatch).then(() => {
+			setIsLoading(false);
+		});
+	};
 
 	useEffect(() => {
-		dispatch(fetchProducts());
+		loadProducts();
+		props.navigation.addListener('focus', loadProducts);
+		return () => {
+			props.navigation.removeListener('focus', loadProducts);
+		};
 	}, []);
 
 	props.navigation?.setOptions(
@@ -32,7 +46,23 @@ const ProductsOverviewScreen: React.FC<ProductsOverviewScreenProps> = (props) =>
 			headerLeft: () => <ShopcartButton iconName="md-menu" onPress={() => props.navigation.toggleDrawer()} />,
 		}),
 	);
+
 	const products = useSelector((state: TRootState) => state.products.availableProducts);
+
+	if (isLoading)
+		return (
+			<View style={styles.centered}>
+				<ActivityIndicator size="large" color={Colors.primary} />
+			</View>
+		);
+
+	if (products.length === 0)
+		return (
+			<View style={styles.centered}>
+				<Text> No products found.</Text>
+			</View>
+		);
+
 	return (
 		<View style={styles.container}>
 			<FlatList
@@ -64,6 +94,11 @@ const screenOptions = (optional: Partial<INavigationOptions> = {}): INavigationO
 };
 
 const styles = StyleSheet.create({
+	centered: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 	container: {
 		flex: 1,
 		justifyContent: 'center',
