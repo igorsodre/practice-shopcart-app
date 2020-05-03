@@ -18,7 +18,6 @@ const ProductsOverviewScreen: React.FC<ProductsOverviewScreenProps> = (props) =>
 	const [isLoading, setIsLoading] = useState(false);
 
 	const loadProducts = () => {
-		console.log('loading products');
 		setIsLoading(true);
 		fetchProducts()(dispatch).then(() => {
 			setIsLoading(false);
@@ -64,30 +63,32 @@ const ProductsOverviewScreen: React.FC<ProductsOverviewScreenProps> = (props) =>
 		);
 
 	return (
-		<View style={styles.container}>
-			<FlatList
-				data={products}
-				renderItem={(itemData) => (
-					<ProductItem
-						product={itemData.item}
-						onAddToCart={() => {
-							dispatch(addToCart(itemData.item));
-						}}
-						onSelect={() => {
-							props.navigation.navigate('ProductDetail', { productId: itemData.item.id });
-						}}
-					/>
-				)}
-				style={{ width: '100%' }}
-			/>
-		</View>
+		//<View style={styles.container}>
+		<FlatList
+			onRefresh={loadProducts}
+			refreshing={isLoading}
+			data={products}
+			renderItem={(itemData) => (
+				<ProductItem
+					product={itemData.item}
+					onAddToCart={() => {
+						dispatch(addToCart(itemData.item));
+					}}
+					onSelect={() => {
+						props.navigation.navigate('ProductDetail', { productId: itemData.item.id });
+					}}
+				/>
+			)}
+			style={{ width: '100%' }}
+		/>
+		//</View>
 	);
 };
 
 const screenOptions = (optional: Partial<INavigationOptions> = {}): INavigationOptions => {
 	return {
 		...{
-			title: 'ProductsOverview',
+			title: 'ProductsOverviews',
 		},
 		...optional,
 	};

@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import { shopcartReducers } from './src/data';
-import credentials from './src/data/rpgmanager-ea5c9-firebase-adminsdk-r9hv5-714ff7de0d.json';
+import credentials from './src/data/rpgmanager-ea5c9-firebase-adminsdk-r9hv5-714ff7de0d';
 import ShopcartNavigator from './src/navigation/Shopcartnavigator';
 
 enableScreens();
@@ -15,7 +15,13 @@ const store = createStore(shopcartReducers, applyMiddleware(ReduxThunk));
 YellowBox.ignoreWarnings(['Setting a timer']);
 
 export default function App() {
-	if (!firebase.apps.length) firebase.initializeApp(credentials);
+	if (!firebase.apps.length) {
+		try {
+			firebase.initializeApp(credentials);
+		} catch (err) {
+			console.log(err.message);
+		}
+	}
 
 	return (
 		<Provider store={store}>
