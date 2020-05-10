@@ -10,6 +10,7 @@ import ProductDetailScreen from '../screens/ProductDetailScreen';
 import ProductsOverviewScreen from '../screens/ProductsOverviewScreen';
 import UserProductsScreen from '../screens/UserProductsScreen';
 import EditProductScreen from '../screens/EditProductScreen';
+import AuthScreenScreen from '../screens/AuthScreen/AuthScreen';
 
 const defaultNavigationOptions: StackNavigationOptions = {
 	headerStyle: {
@@ -73,8 +74,15 @@ const ShopcartDrawerNavigator = () => (
 	</Drawer.Navigator>
 );
 
+const AuthStackNavigator = () => (
+	<Stack.Navigator screenOptions={defaultNavigationOptions}>
+		<Stack.Screen component={AuthScreenScreen} name="Auth" />
+	</Stack.Navigator>
+);
+
 export default () => (
 	<NavigationContainer>
-		<ShopcartDrawerNavigator />
+		<AuthStackNavigator />
+		{/* <ShopcartDrawerNavigator /> */}
 	</NavigationContainer>
 );

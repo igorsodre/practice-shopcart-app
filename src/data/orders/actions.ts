@@ -1,6 +1,6 @@
-import { ICartItemHolder } from '../cart/reducer';
-import { ThunxDispatcher } from '../../typings';
 import firebase from 'firebase';
+import { ThunxDispatcher } from '../../typings';
+import { ICartItemHolder } from '../cart/reducer';
 
 export const ADD_ORDER_ACTION = 'ADD_ORDER_ACTION';
 export const FETCH_ORDERS_ACTION = 'FETCH_ORDERS_ACTION';
