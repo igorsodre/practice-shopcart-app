@@ -6,6 +6,7 @@ import ShopcartButton from '../../components/ShopcartButton';
 import { createProduct, updateProduct } from '../../data/products/actions';
 import { Product } from '../../models/product';
 import { INavigationOptions, INavigatorProp } from '../../typings';
+import { AppDispatcher } from '../../data';
 
 type EditProductScreenState = {
 	title: string;
@@ -29,7 +30,7 @@ const EditProductScreen: React.FC<EditProductScreenProps> = (props) => {
 	const { product } = props.route.params;
 	const headerTitle = product ? 'Edit Product' : 'Add Product';
 
-	const dispatch = useDispatch();
+	const dispatch: AppDispatcher = useDispatch();
 	const [state, setState] = useState<EditProductScreenState>(initProduct(product));
 	const updateState = (newState: Partial<EditProductScreenState>): void => {
 		setState((old) => ({ ...old, ...newState }));
@@ -50,21 +51,18 @@ const EditProductScreen: React.FC<EditProductScreenProps> = (props) => {
 		}
 		const { title, description, imageUrl, price } = state;
 		if (product && product.id) {
-			updateProduct(
-				product.id,
-				title,
-				description,
-				imageUrl,
-			)(dispatch).then(() => {
+			dispatch(updateProduct(product.id, title, description, imageUrl)).then(() => {
 				props.navigation.pop();
 			});
 		} else {
-			createProduct(
-				title,
-				description,
-				'https://images.pexels.com/photos/912110/pexels-photo-912110.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-				price,
-			)(dispatch).then(() => {
+			dispatch(
+				createProduct(
+					title,
+					description,
+					'https://images.pexels.com/photos/912110/pexels-photo-912110.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+					price,
+				),
+			).then(() => {
 				props.navigation.pop();
 			});
 		}

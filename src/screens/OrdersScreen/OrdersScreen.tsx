@@ -4,7 +4,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import ShopcartButton from '../../components/ShopcartButton';
 import { Colors } from '../../constants';
-import { TRootState } from '../../data';
+import { TRootState, AppDispatcher } from '../../data';
 import { fetchOrders } from '../../data/orders/actions';
 import { INavigationOptions, INavigatorProp } from '../../typings';
 import OrderItem from './OrderItem';
@@ -14,7 +14,7 @@ type OrdersScreenProps = INavigatorProp<{}, OrdersRouteParams>;
 
 const OrdersScreen: React.FC<OrdersScreenProps> = (props) => {
 	const orders = useSelector((state: TRootState) => state.orders.orders);
-	const dispatch = useDispatch();
+	const dispatch: AppDispatcher = useDispatch();
 	const [isLoading, setIsLoading] = useState(false);
 	props.navigation.setOptions(
 		screenOptions({
@@ -23,16 +23,16 @@ const OrdersScreen: React.FC<OrdersScreenProps> = (props) => {
 	);
 	const loadOrders = () => {
 		setIsLoading(true);
-		fetchOrders()(dispatch).then(() => {
+		dispatch(fetchOrders()).then(() => {
 			setIsLoading(false);
 		});
 	};
 
 	useEffect(() => {
 		loadOrders();
-		props.navigation.addListener('focus', loadOrders);
+		const unsubscribeEvent = props.navigation.addListener('focus', loadOrders);
 		return () => {
-			props.navigation.removeListener('focus', loadOrders);
+			unsubscribeEvent();
 		};
 	}, []);
 

@@ -77,12 +77,12 @@ const ShopcartDrawerNavigator = () => (
 const AuthStackNavigator = () => (
 	<Stack.Navigator screenOptions={defaultNavigationOptions}>
 		<Stack.Screen component={AuthScreenScreen} name="Auth" />
+		<Stack.Screen component={ShopcartDrawerNavigator} name="Main" options={{ header: () => null }} />
 	</Stack.Navigator>
 );
 
 export default () => (
 	<NavigationContainer>
 		<AuthStackNavigator />
-		{/* <ShopcartDrawerNavigator /> */}
 	</NavigationContainer>
 );

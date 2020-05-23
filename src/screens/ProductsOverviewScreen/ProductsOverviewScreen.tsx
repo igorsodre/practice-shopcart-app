@@ -19,16 +19,16 @@ const ProductsOverviewScreen: React.FC<ProductsOverviewScreenProps> = (props) =>
 
 	const loadProducts = () => {
 		setIsLoading(true);
-		fetchProducts()(dispatch).then(() => {
+		dispatch(fetchProducts()).then(() => {
 			setIsLoading(false);
 		});
 	};
 
 	useEffect(() => {
 		loadProducts();
-		props.navigation.addListener('focus', loadProducts);
+		const unsubscribeEvent = props.navigation.addListener('focus', loadProducts);
 		return () => {
-			props.navigation.removeListener('focus', loadProducts);
+			unsubscribeEvent();
 		};
 	}, []);
 

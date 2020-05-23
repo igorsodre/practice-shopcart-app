@@ -1,23 +1,28 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, View, ActivityIndicator } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Colors } from '../../constants';
 import { login, SignUp } from '../../data/auth/actions';
 import { INavigationOptions, INavigatorProp } from '../../typings';
+import { AppDispatcher } from '../../data';
 
 type AuthScreenRouteParams = {};
 type AuthScreenScreenProps = INavigatorProp<{}, AuthScreenRouteParams>;
 const AuthScreenScreen: React.FC<AuthScreenScreenProps> = (props) => {
 	props.navigation.setOptions(screenOptions({}));
-	const dispatch = useDispatch();
+	const dispatch: AppDispatcher = useDispatch();
 	const [email, setEmail] = useState('teste@email.com');
 	const [password, setPassword] = useState('pass123');
 	const [isSignUp, setIsSignUp] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
-	const authHandler = () => {
-		if (isSignUp) SignUp(email, password)(dispatch);
-		else login(email, password)(dispatch);
+	const authHandler = async () => {
+		setIsLoading(true);
+		if (isSignUp) await dispatch(SignUp(email, password));
+		else await dispatch(login(email, password));
+		setIsLoading(false);
+		props.navigation.replace('Main', {});
 	};
 
 	const getToggleSignUpButtonText = (): string => {
@@ -59,7 +64,11 @@ const AuthScreenScreen: React.FC<AuthScreenScreenProps> = (props) => {
 						/>
 					</View>
 					<View style={styles.buttonContainer}>
-						<Button title={getSignUpButtonText()} color={Colors.primary} onPress={authHandler} />
+						{isLoading ? (
+							<ActivityIndicator color={Colors.primary} size="small" />
+						) : (
+							<Button title={getSignUpButtonText()} color={Colors.primary} onPress={authHandler} />
+						)}
 						<Button
 							title={getToggleSignUpButtonText()}
 							color={Colors.accent}

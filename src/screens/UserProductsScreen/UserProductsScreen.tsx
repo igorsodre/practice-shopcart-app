@@ -59,7 +59,7 @@ const UserProductsScreen: React.FC<UserProductsScreenProps> = (props) => {
 const screenOptions = (optional: Partial<INavigationOptions> = {}): INavigationOptions => {
 	return {
 		...{
-			title: 'Your Products',
+			title: 'Your Productses',
 		},
 		...optional,
 	};
